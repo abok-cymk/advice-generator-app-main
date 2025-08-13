@@ -1,6 +1,9 @@
 import { clsx } from 'clsx';
 import { useSuspenseAdvice, useGetNewAdvice } from '../hooks/useSuspenseAdvice';
 import { useCurrentAdvice, useIsAnimating } from '../store/adviceStore';
+import DividerDesktop from "/pattern-divider-desktop.svg";
+import DividerMobile from "/pattern-divider-mobile.svg";
+import Dice from "/icon-dice.svg";
 
 export const AdviceCard = () => {
   // Initialize suspense data
@@ -49,10 +52,10 @@ export const AdviceCard = () => {
           <picture>
             <source 
               media="(min-width: 768px)" 
-              srcSet="advice-generator-app-main/pattern-divider-desktop.svg"
+              srcSet={DividerDesktop}
             />
             <img 
-              src="advice-generator-app-main/pattern-divider-mobile.svg" 
+              src={DividerMobile}
               alt="" 
               className="w-auto h-4"
               role="presentation"
@@ -79,7 +82,7 @@ export const AdviceCard = () => {
             aria-label="Get new advice"
           >
             <img 
-              src="advice-generator-app-main/icon-dice.svg" 
+              src={Dice}
               alt="" 
               className={clsx(
                 'w-6 h-6 transition-transform duration-200',
