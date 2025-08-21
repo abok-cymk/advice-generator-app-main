@@ -41,6 +41,24 @@ Users should be able to:
 - CSS Grid
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
+- [Vite](https://vitejs.dev/) - Build tool
+- [TanStack Query](https://tanstack.com/query) - Data fetching
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+
+### Deployment
+
+This project is automatically deployed to GitHub Pages using GitHub Actions. The deployment workflow:
+
+1. Runs on every push to the `main` branch
+2. Installs dependencies and runs linting
+3. Builds the production version
+4. Deploys to GitHub Pages
+
+To deploy manually:
+```bash
+npm run build
+npm run deploy
+```
 
 ## Author
 
