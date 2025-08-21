@@ -16,10 +16,10 @@ export const useSuspenseAdvice = () => {
       setAdvice(data);
       setInitialized();
       
-      // Prefetch next advice in background for instant loading
+      // Aggressively prefetch next advice for instant loading
       setTimeout(() => {
         prefetchNextAdvice();
-      }, 500);
+      }, 100); // Reduced from 500ms for faster prefetching
     }
   }, [data, setAdvice, setInitialized, prefetchNextAdvice]);
 
@@ -61,15 +61,15 @@ export const useGetNewAdvice = () => {
     const usedCache = getNewAdviceOptimistic();
     
     if (usedCache) {
-      // If we used cached data, end animation quickly
+      // If we used cached data, end animation quickly for instant feel
       setTimeout(() => {
         endAnimation();
-      }, 300);
+      }, 200); // Reduced from 300ms
     } else {
-      // If fetching fresh data, animation will end when data arrives
+      // If fetching fresh data, reasonable timeout for loading state
       setTimeout(() => {
         endAnimation();
-      }, 1500);
+      }, 1000); // Reduced from 1500ms
     }
   };
 };

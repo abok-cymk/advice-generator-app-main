@@ -33,14 +33,14 @@ export const useAdviceStore = create<AdviceStore>()(
     setAdvice: (advice: Advice) => {
       const { currentAdvice, isInitialized } = get();
 
-      // If we have different advice and we're initialized, trigger animation
+      // If we have different advice and we're initialized, trigger smooth animation
       if (isInitialized && currentAdvice && currentAdvice.id !== advice.id) {
         set({ isAnimating: true });
 
-        // Smooth transition delay
+        // Faster transition for better UX
         setTimeout(() => {
           set({ currentAdvice: advice, isAnimating: false });
-        }, 150);
+        }, 100); // Reduced from 150ms to 100ms
       } else {
         set({ currentAdvice: advice, isInitialized: true });
       }
