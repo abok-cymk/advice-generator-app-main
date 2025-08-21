@@ -1,12 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRandomAdvice, ADVICE_QUERY_KEYS } from "../hooks/useAdvice";
+import { useOptimizedRandomAdvice, useOptimizedAdviceActions } from "../hooks/useOptimizedAdvice";
+import { ADVICE_QUERY_KEYS } from "../hooks/useAdvice";
 import { useAdviceStore } from "../store/adviceStore";
 import { useEffect } from "react";
 
 // Suspense-compatible hook that throws promises
 export const useSuspenseAdvice = () => {
   const queryClient = useQueryClient();
-  const { data, error, isLoading, isFetching } = useRandomAdvice();
+  const { data, error, isLoading, isFetching, prefetchNextAdvice } = useOptimizedRandomAdvice();
   const { setAdvice, setInitialized } = useAdviceStore();
 
   // Update store when data changes
@@ -14,8 +15,13 @@ export const useSuspenseAdvice = () => {
     if (data) {
       setAdvice(data);
       setInitialized();
+      
+      // Prefetch next advice in background for instant loading
+      setTimeout(() => {
+        prefetchNextAdvice();
+      }, 500);
     }
-  }, [data, setAdvice, setInitialized]);
+  }, [data, setAdvice, setInitialized, prefetchNextAdvice]);
 
   // Throw error for error boundary
   if (error) {
@@ -45,13 +51,25 @@ export const useSuspenseAdvice = () => {
 
 // Hook for getting new advice with optimistic updates
 export const useGetNewAdvice = () => {
-  const queryClient = useQueryClient();
-  const { startAnimation } = useAdviceStore();
+  const { getNewAdviceOptimistic } = useOptimizedAdviceActions();
+  const { startAnimation, endAnimation } = useAdviceStore();
 
   return () => {
     startAnimation();
-    queryClient.invalidateQueries({
-      queryKey: ADVICE_QUERY_KEYS.random(),
-    });
+    
+    // Try optimistic update first
+    const usedCache = getNewAdviceOptimistic();
+    
+    if (usedCache) {
+      // If we used cached data, end animation quickly
+      setTimeout(() => {
+        endAnimation();
+      }, 300);
+    } else {
+      // If fetching fresh data, animation will end when data arrives
+      setTimeout(() => {
+        endAnimation();
+      }, 1500);
+    }
   };
 };

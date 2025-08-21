@@ -3,7 +3,7 @@ import type { AdviceSlipResponse, Advice } from "../types";
 const BASE_URL = "https://api.adviceslip.com";
 
 // Rate limiting configuration
-const RATE_LIMIT_DELAY = 1000; // 2 seconds between requests
+const RATE_LIMIT_DELAY = 200; // 200ms between requests for better UX
 let lastRequestTime = 0;
 
 class RateLimitError extends Error {
